@@ -1,0 +1,13 @@
+/.idea
+
+/error logs
+
+.gitignore
+
+/out
+
+/src/META-INF
+
+CoolThing-wtf.iml
+
+logger.txt
