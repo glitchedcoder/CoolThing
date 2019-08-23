@@ -33,4 +33,4 @@ The assets (other than some music/sounds) are made by me, but you are free to us
  - [Jansi v1.17.1](https://github.com/fusesource/jansi)
  - [Google's FindBugs v3.0.2](https://github.com/findbugsproject/findbugs)
  - [Google's GSON v2.8.0](https://github.com/google/gson) *- not currently used, but will eventually*
- - [Jansi v3.10.0](https://github.com/jline/jline3)
+ - [JLine v3.10.0](https://github.com/jline/jline3)
