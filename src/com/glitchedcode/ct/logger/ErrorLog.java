@@ -48,7 +48,7 @@ public class ErrorLog {
                     "------------------------------",
                     "END OF STACK TRACE",
                     "------------------------------"
-            ).forEach(writer::write);
+            ).forEach(writer::println);
             writer.flush();
             writer.close();
         } catch (IOException e) {

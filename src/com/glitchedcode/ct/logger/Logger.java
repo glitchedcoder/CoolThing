@@ -89,6 +89,12 @@ public final class Logger {
         if (isOpen()) {
             if (type == LogType.DEBUG && !CoolThing.isDebugEnabled())
                 return;
+            if (CoolThing.hasInputListener()) {
+                if (CoolThing.getInputListener() != null) {
+                    if (CoolThing.getInputListener().isRunning())
+                        System.out.print("\b\b");
+                }
+            }
             if (type == LogType.ERROR)
                 errCount.incrementAndGet();
             else if (type == LogType.WARN)
@@ -98,6 +104,12 @@ public final class Logger {
             } else {
                 System.out.print(Ansi.ansi().fgBrightBlack().a(time()));
                 System.out.println(type.getColor().fg(color).a(message).reset());
+            }
+            if (CoolThing.hasInputListener()) {
+                if (CoolThing.getInputListener() != null) {
+                    if (CoolThing.getInputListener().isRunning())
+                        System.out.print("> ");
+                }
             }
         }
     }
@@ -210,31 +222,8 @@ public final class Logger {
         return "[" + FORMAT.format(new Date()) + "] ";
     }
 
-    private String timeLog() {
-        SimpleDateFormat f = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS");
-        return f.format(new Date());
-    }
-
     private void write(String s) {
         if (isOpen())
             this.writer.println(s);
-    }
-
-    private String formatStackTrace(Throwable throwable) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(throwable.getClass().getName());
-        builder.append(": ");
-        builder.append(throwable.getMessage());
-        builder.append("\n");
-        for (StackTraceElement element : throwable.getStackTrace()) {
-            builder.append("\t");
-            builder.append(element.getClassName());
-            builder.append("#");
-            builder.append(element.getMethodName());
-            builder.append(":");
-            builder.append(element.getLineNumber());
-            builder.append(element.isNativeMethod() ? " (native method)\n" : "\n");
-        }
-        return builder.toString();
     }
 }

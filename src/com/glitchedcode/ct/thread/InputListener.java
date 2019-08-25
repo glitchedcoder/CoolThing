@@ -44,7 +44,7 @@ public final class InputListener extends Thread {
     public void run() {
         running.set(true);
         while (running.get()) {
-            String line = reader.readLine("> ");
+            String line = reader.readLine();
             if (line.isEmpty())
                 continue;
             String[] s = line.split(" ");
@@ -61,13 +61,13 @@ public final class InputListener extends Thread {
                     l.remove(0);
                     String[] b = l.toArray(new String[0]);
                     if (!CommandManager.execute(a, b))
-                        logger.command(Ansi.Color.YELLOW, "Usage: " + command.getUsage());
+                        logger.command(Ansi.Color.RED, "Usage: " + command.getUsage());
                 } else {
                     if (!CommandManager.execute(a, new String[0]))
-                        logger.command(Ansi.Color.YELLOW, "Usage: " + command.getUsage());
+                        logger.command(Ansi.Color.RED, "Usage: " + command.getUsage());
                 }
             } else
-                logger.command(Ansi.Color.YELLOW, "Unknown command \"" + a + "\".");
+                logger.command(Ansi.Color.RED, "Unknown command \"" + a + "\".");
         }
     }
 
@@ -76,6 +76,7 @@ public final class InputListener extends Thread {
     }
 
     public void close() {
+        System.out.print("\b\b");
         running.set(false);
         try {
             reader.getTerminal().flush();

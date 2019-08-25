@@ -6,6 +6,7 @@ import org.fusesource.jansi.Ansi;
 
 import javax.annotation.concurrent.ThreadSafe;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,12 +27,12 @@ public final class GameApplication extends JFrame implements Runnable, FocusList
         this.fps = new AtomicInteger(0);
         this.tps = new AtomicInteger(0);
         this.running = new AtomicBoolean(false);
-        setTitle("Cool Thing");
-        setExtendedState(MAXIMIZED_BOTH);
+        setTitle("Cool Thing v" + CoolThing.getVersion());
+        Dimension d = new Dimension(w, h);
+        setSize(d);
+        window.adjustSize(this, w, h);
         add(window);
-        pack();
         setResizable(false);
-        window.rs(getWidth(), getHeight());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         addFocusListener(this);
         addWindowListener(new WindowAdapter() {

@@ -4,6 +4,7 @@ import com.glitchedcode.ct.CoolThing;
 import com.glitchedcode.ct.entity.ImageType;
 import com.glitchedcode.ct.entity.Location;
 import com.glitchedcode.ct.entity.stat.ScreenFadeIn;
+import com.glitchedcode.ct.entity.stat.ScreenFadeOut;
 import com.glitchedcode.ct.entity.stat.StaticImage;
 import com.glitchedcode.ct.entity.stat.StaticText;
 import com.glitchedcode.ct.font.TextBuilder;
@@ -21,8 +22,7 @@ public class SplashScreen extends View {
     private StaticImage logo;
     private StaticText loading;
     private ScreenFadeIn screenFadeIn;
-
-    //private ScreenFade white, black;
+    private ScreenFadeOut screenFadeOut;
 
     public SplashScreen() {
         super("Splash Screen");
@@ -30,6 +30,7 @@ public class SplashScreen extends View {
 
     @Override
     protected void onLoad() {
+        requestFocus();
         logo = new StaticImage(this, ImageType.LOGO, new Location(0, 0));
         logo.spawn();
         logger.debug(logo.toString());
@@ -42,22 +43,29 @@ public class SplashScreen extends View {
         Rectangle r2 = loading.getBounds();
         loading.setLocation(new Location((WIDTH / 2) - (r2.width / 2), (HEIGHT / 2) - (r2.height / 2) + (r.height / 2) + 100));
         logger.debug(loading.toString());
+        screenFadeOut = new ScreenFadeOut(this, new Color(255, 255, 255, 255), 6);
+        screenFadeOut.spawn();
+        addRenderable(screenFadeOut);
         screenFadeIn = new ScreenFadeIn(this, new Color(0, 0, 0, 0), 3);
         ScheduledExecutorService service = CoolThing.getExecutorService();
-        service.schedule((Runnable) Sound.UPGRADE_PURCHASE::play, 1, TimeUnit.SECONDS);
+        service.schedule((Runnable) Sound.UPGRADE_PURCHASE::play, 2, TimeUnit.SECONDS);
         service.schedule(() -> {
             screenFadeIn.spawn();
             addRenderable(screenFadeIn);
-        }, 3, TimeUnit.SECONDS);
-        service.schedule((Runnable) Sound.THEME_SONG::play, 7, TimeUnit.SECONDS);
+        }, 4, TimeUnit.SECONDS);
+        service.schedule((Runnable) Sound.THEME_SONG::play, 8, TimeUnit.SECONDS);
     }
 
     @Override
     protected void onUnload() {
         logo.remove();
         loading.remove();
+        screenFadeOut.remove();
+        screenFadeIn.remove();
         logo = null;
         loading = null;
+        screenFadeOut = null;
+        screenFadeIn = null;
     }
 
     @Override
@@ -66,20 +74,12 @@ public class SplashScreen extends View {
 
     @Override
     public Key[] getKeyListeners() {
-        return new Key[] {
-                Key.ESCAPE,
-                Key.A
-        };
+        return new Key[0];
     }
 
     @Override
     protected void onKeyPress(Key key) {
-        switch (key) {
-            case ESCAPE:
-                CoolThing.stop(0);
-            case A:
-                logger.debug("You pressed the A key.");
-        }
+        // do nothing
     }
 
     @Override

@@ -25,10 +25,7 @@ public class ScreenFadeIn extends Entity {
     public void tick(int count) {
         if (color.getAlpha() < 255) {
             int sum = color.getAlpha() + skip;
-            if (sum >= 255) {
-                color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 255);
-            } else
-                color = new Color(color.getRed(), color.getGreen(), color.getBlue(), sum);
+            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), sum >= 255 ? 255 : sum);
         }
     }
 
@@ -45,8 +42,7 @@ public class ScreenFadeIn extends Entity {
 
     @Override
     protected void onLoad() {
-        GameWindow window = CoolThing.getApplication().getWindow();
-        bounds = new Rectangle(0, 0, window.getWidth(), window.getHeight());
+        bounds = new Rectangle(0, 0, CoolThing.getWidth(), CoolThing.getHeight());
     }
 
     @Override

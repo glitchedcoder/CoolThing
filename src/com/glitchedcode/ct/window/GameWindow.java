@@ -24,20 +24,24 @@ public class GameWindow extends Canvas {
         hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
     }
 
-    public GameWindow(@Nonnull View view) {
+    public GameWindow() {
         super();
-        this.view = new AtomicReference<>(view);
-        MANAGER.addKeyEventDispatcher(view);
+        this.view = new AtomicReference<>(null);
         setFocusable(true);
+    }
+
+    void adjustSize(GameApplication window, int w, int h) {
+        Insets insets = window.getInsets();
+        int b = h - insets.top;
+        Dimension d = new Dimension(w, b);
+        setSize(d);
+        setPreferredSize(d);
+        setMaximumSize(d);
+        setMinimumSize(d);
     }
 
     public View getView() {
         return view.get();
-    }
-
-    void rs(int w, int h) {
-        view.get().size(w, h);
-        view.get().onLoad();
     }
 
     protected synchronized void tick(int count) {
@@ -91,16 +95,22 @@ public class GameWindow extends Canvas {
     }
 
     public synchronized void setView(@Nonnull View view) throws IllegalArgumentException {
-        if (!this.getView().equals(view)) {
-            logger.debug("Setting new view (id: " + view.getId() + ", old view id: " + (getView() != null ? getView().getId() : "null") + ")");
-            if (getView() != null) {
-                getView().onUnload();
-                MANAGER.removeKeyEventDispatcher(getView());
-            }
-            view.onLoad();
-            MANAGER.addKeyEventDispatcher(view);
-            this.view.set(view);
-        } else
-            throw new IllegalArgumentException("Given View (id " + view.getId() + ") is same as current View (id " + getView().getId() + ").");
+        logger.debug("Setting new view (id: " + view.getId() + ", old view id: " + (getView() != null ? getView().getId() : "null") + ")");
+        if (getView() != null) {
+            if (!this.getView().equals(view)) {
+                if (getView() != null) {
+                    getView().onUnload();
+                    MANAGER.removeKeyEventDispatcher(getView());
+                }
+            } else
+                throw new IllegalArgumentException("Given View (id " + view.getId() + ") is same as current View (id " + getView().getId() + ").");
+        }
+        logger.info("w: " + getWidth() + ", h: " + getHeight());
+        int w = CoolThing.getApplication().getWidth();
+        int h = CoolThing.getApplication().getHeight();
+        view.size(getWidth(), getHeight());
+        view.onLoad();
+        MANAGER.addKeyEventDispatcher(view);
+        this.view.set(view);
     }
 }

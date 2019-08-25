@@ -2,6 +2,7 @@ package com.glitchedcode.ct;
 
 import com.glitchedcode.ct.command.CommandManager;
 import com.glitchedcode.ct.command.Help;
+import com.glitchedcode.ct.command.Spawn;
 import com.glitchedcode.ct.command.Stop;
 import com.glitchedcode.ct.logger.Logger;
 import com.glitchedcode.ct.thread.InputListener;
@@ -27,7 +28,7 @@ public final class CoolThing {
     private static boolean noColor, debug, iL;
     private static GameApplication application;
     private static InputListener inputListener;
-    private static final String VERSION = "1.0.0";
+    private static final String VERSION = "0.1.1-beta";
     private static ScheduledExecutorService executorService;
     private static final File dataFolder = new File(System.getProperty("user.dir"));
 
@@ -49,19 +50,21 @@ public final class CoolThing {
             logger.info("No-color has been enabled for this session.");
         WIDTH = getWidth(args);
         HEIGHT = getHeight(args);
-        logger.debug("Width: " + WIDTH + ", Height: " + HEIGHT);
         SplashScreen splashScreen = new SplashScreen();
-        GameWindow window = new GameWindow(splashScreen);
+        GameWindow window = new GameWindow();
         application = new GameApplication(window, WIDTH, HEIGHT);
+        window.setView(splashScreen);
         executorService.execute(application);
         if (iL) {
             Stream.of(
                     new Help(),
-                    new Stop()
+                    new Stop(),
+                    new Spawn()
             ).forEach(CommandManager::register);
             inputListener = new InputListener();
             logger.debug("Starting input listener...");
             inputListener.start();
+            System.out.print("> ");
         }
     }
 
@@ -125,7 +128,7 @@ public final class CoolThing {
                 try {
                     int w = Integer.valueOf(s);
                     if (w > 0)
-                        WIDTH = w;
+                        return w;
                     else
                         logger.warn(Ansi.Color.YELLOW, "The given width " + w + " needs to be positive.");
                 } catch (NumberFormatException e) {
@@ -134,8 +137,8 @@ public final class CoolThing {
             } else
                 logger.warn(Ansi.Color.YELLOW, "Unable to read width: arg length given: " + a.length + ", expected: 1");
         } else {
-            Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-            return dimension.width;
+            Rectangle winSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+            return winSize.width;
         }
         return 1920;
     }
@@ -148,7 +151,7 @@ public final class CoolThing {
                 try {
                     int h = Integer.valueOf(s);
                     if (h > 0)
-                        HEIGHT = h;
+                        return h;
                     else
                         logger.warn(Ansi.Color.YELLOW, "The given height " + h + " needs to be positivie.");
                 } catch (NumberFormatException e) {
@@ -158,12 +161,19 @@ public final class CoolThing {
                 logger.warn(Ansi.Color.YELLOW, "Unable to read height: arg length given: " + a.length + ", expected: 1");
         } else {
             Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            GraphicsDevice device = ge.getDefaultScreenDevice();
-            Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(device.getDefaultConfiguration());
-            return dimension.height - insets.bottom;
+            Rectangle winSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+            int taskbarHeight = dimension.height - winSize.height;
+            return dimension.height - taskbarHeight;
         }
         return 1080;
+    }
+
+    public static int getWidth() {
+        return WIDTH;
+    }
+
+    public static int getHeight() {
+        return HEIGHT;
     }
 
     public static GameApplication getApplication() {
@@ -190,19 +200,19 @@ public final class CoolThing {
         return noColor;
     }
 
+    public static boolean hasInputListener() {
+        return iL;
+    }
+
+    public static InputListener getInputListener() {
+        return inputListener;
+    }
+
     public static File getDataFolder() {
         return dataFolder;
     }
 
     public static String getVersion() {
         return VERSION;
-    }
-
-    public static int getHeight() {
-        return HEIGHT;
-    }
-
-    public static int getWidth() {
-        return WIDTH;
     }
 }
