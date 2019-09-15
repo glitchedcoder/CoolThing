@@ -5,6 +5,7 @@ import com.glitchedcode.ct.entity.EntityType;
 import com.glitchedcode.ct.entity.Location;
 import com.glitchedcode.ct.font.TextBuilder;
 import com.glitchedcode.ct.window.View;
+import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -12,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+@EqualsAndHashCode(callSuper = true)
 public class MenuComponent extends Entity {
 
     private Rectangle bounds;
@@ -95,14 +97,14 @@ public class MenuComponent extends Entity {
         updateText();
     }
 
-    public void setFocused(boolean focused) throws IllegalStateException {
+    public void setFocused(boolean focused) {
         if (!isFocusable() && focused)
             throw new IllegalStateException("Tried to set Menu Component (" + toString() + ") to focused while unfocusable.");
         this.focused.set(focused);
     }
 
     public void setFocusable(boolean focusable) {
-        this.focusable.set(false);
+        this.focusable.set(focusable);
         updateText();
     }
 

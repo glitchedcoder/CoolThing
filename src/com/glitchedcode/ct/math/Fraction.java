@@ -1,7 +1,9 @@
 package com.glitchedcode.ct.math;
 
 import com.glitchedcode.ct.CoolThing;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(of = {"numerator", "denominator"})
 public class Fraction implements Cloneable {
 
     private int numerator, denominator;
@@ -11,11 +13,7 @@ public class Fraction implements Cloneable {
         this.denominator = denominator;
     }
 
-    public Fraction(float floatingPoint) throws IllegalArgumentException {
-        this(Double.valueOf(String.valueOf(floatingPoint)));
-    }
-
-    public Fraction(double decimal) throws IllegalArgumentException {
+    public Fraction(double decimal) {
         if (Double.isFinite(decimal)) {
             if (decimal != Math.floor(decimal)) {
                 String s = String.valueOf(decimal);
@@ -41,7 +39,7 @@ public class Fraction implements Cloneable {
         this.numerator = numerator;
     }
 
-    public void setDenominator(int denominator) throws IllegalArgumentException {
+    public void setDenominator(int denominator) {
         if (denominator != 0)
             this.denominator = denominator;
         else
@@ -96,25 +94,12 @@ public class Fraction implements Cloneable {
         return numerator + "/" + denominator;
     }
 
-    public float toDecimal() {
-        return numerator / denominator;
+    public double toDecimal() {
+        return (double) numerator / (double) denominator;
     }
 
     public boolean greaterThan(Fraction fraction) {
         return fraction.toDecimal() < this.toDecimal();
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (object != null) {
-            if (object == this)
-                return true;
-            if (object instanceof Fraction) {
-                Fraction fraction = (Fraction) object;
-                return fraction.toDecimal() == this.toDecimal();
-            }
-        }
-        return false;
     }
 
     @Override

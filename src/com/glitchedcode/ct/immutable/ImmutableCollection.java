@@ -89,7 +89,7 @@ public final class ImmutableCollection<E> implements Collection<E> {
 
     @Override
     public void clear() {
-
+        // ignore
     }
 
     @Override

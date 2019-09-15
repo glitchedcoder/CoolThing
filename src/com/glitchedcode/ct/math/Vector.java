@@ -1,9 +1,12 @@
 package com.glitchedcode.ct.math;
 
+import lombok.EqualsAndHashCode;
+
 /**
  * Used for speed and angle measurements.
  * Always assumes that the initial point is (0, 0) on a graph.
  */
+@EqualsAndHashCode(of = { "x", "y" })
 public class Vector implements Cloneable {
 
     private final double x, y;
@@ -60,19 +63,6 @@ public class Vector implements Cloneable {
 
     public Angle getAngle() {
         return new Angle(Math.atan2(this.y, this.x));
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj != null) {
-            if (obj == this)
-                return true;
-            if (obj instanceof Vector) {
-                Vector vector = (Vector) obj;
-                return vector.x == this.x && vector.y == this.y;
-            }
-        }
-        return false;
     }
 
     @Override

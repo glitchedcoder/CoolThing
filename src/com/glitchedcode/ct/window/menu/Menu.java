@@ -9,11 +9,15 @@ import javax.annotation.Nonnull;
 
 public abstract class Menu extends View {
 
+    private TextBuilder title;
+
+
     public Menu(@Nonnull TextBuilder title) {
         this(title, 0);
     }
 
     public Menu(@Nonnull TextBuilder title, int yOffset) {
+        this.title = title;
 
     }
 
@@ -30,7 +34,11 @@ public abstract class Menu extends View {
     }
 
     protected final MenuComponent getNextComponent() {
-        return null;
+        int i = getIndex();
+        if (i + 1 == getComponents().length)
+            return getComponents()[0];
+        else
+            return getComponents()[i + 1];
     }
 
     protected final MenuComponent getLastComponent() {
@@ -43,6 +51,16 @@ public abstract class Menu extends View {
 
     protected final MenuComponent getLastFocusableComponent() {
         return null;
+    }
+
+    protected final int getIndex() {
+        MenuComponent component = getFocusedComponent();
+        for (int i = 0; i < getComponents().length; i++) {
+            MenuComponent c = getComponents()[i];
+            if (c.equals(component))
+                return i;
+        }
+        return -1;
     }
 
     @Override
@@ -75,8 +93,6 @@ public abstract class Menu extends View {
             case ARROW_UP:
                 MenuComponent f = getFocusedComponent();
                 MenuComponent l = getLastFocusableComponent();
-                if (f.equals(l))
-                    return;
                 f.setFocused(false);
                 l.setFocused(true);
                 Sound.MENU_MOVE.play();
@@ -85,8 +101,6 @@ public abstract class Menu extends View {
             case ARROW_DOWN:
                 MenuComponent c = getFocusedComponent();
                 MenuComponent n = getNextFocusableComponent();
-                if (c.equals(n))
-                    return;
                 c.setFocused(false);
                 n.setFocused(true);
                 Sound.MENU_MOVE.play();
@@ -94,6 +108,8 @@ public abstract class Menu extends View {
             case ENTER:
                 Sound.MENU_SELECT.play();
                 select(getFocusedComponent());
+            default:
+                break;
         }
     }
 }

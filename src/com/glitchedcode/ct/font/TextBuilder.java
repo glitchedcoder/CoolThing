@@ -7,6 +7,8 @@ import org.fusesource.jansi.Ansi;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import static java.awt.Transparency.TRANSLUCENT;
+
 public final class TextBuilder {
 
     private Color c;
@@ -23,10 +25,6 @@ public final class TextBuilder {
         TERTIARY = new Color(128, 128, 128);
         QUATERNARY = new Color(64, 64, 64);
         BACKGROUND = new Color(0, 0, 0);
-    }
-
-    private TextBuilder(String s, boolean bg) {
-        this(s, Color.WHITE, bg);
     }
 
     private TextBuilder(String s, Color c, boolean bg) {
@@ -50,12 +48,14 @@ public final class TextBuilder {
             return this;
         stringBuilder.append(s);
         BufferedImage i = toImage(CharImage.fromString(s));
+        if (i == null)
+            throw new IllegalStateException("Failed to get stitched image of text " + s);
         if (!bg) {
             int l = BACKGROUND.getRGB();
             for (int j = 0; j < i.getHeight(); j++) {
                 for (int k = 0; k < i.getWidth(); k++) {
                     if (i.getRGB(k, j) == l)
-                        i.setRGB(k, j, Color.TRANSLUCENT);
+                        i.setRGB(k, j, TRANSLUCENT);
                 }
             }
         }
@@ -110,19 +110,13 @@ public final class TextBuilder {
         for (int j = 0; j < i.getWidth(); j++) {
             for (int k = 0; k < i.getHeight(); k++) {
                 int l = i.getRGB(j, k);
-                if (l == PRIMARY.getRGB()) {
+                if (l == PRIMARY.getRGB())
                     i.setRGB(j, k, p.getRGB());
-                    continue;
-                }
-                if (l == SECONDARY.getRGB()) {
+                else if (l == SECONDARY.getRGB())
                     i.setRGB(j, k, s.getRGB());
-                    continue;
-                }
-                if (l == TERTIARY.getRGB()) {
+                else if (l == TERTIARY.getRGB())
                     i.setRGB(j, k, t.getRGB());
-                    continue;
-                }
-                if (l == QUATERNARY.getRGB())
+                else if (l == QUATERNARY.getRGB())
                     i.setRGB(j, k, q.getRGB());
             }
         }
@@ -148,7 +142,7 @@ public final class TextBuilder {
     }
 
     private BufferedImage stitch(BufferedImage b1, BufferedImage b2) {
-        int w = b1.getWidth() + b2.getWidth(), h = (b1.getHeight() >= b2.getHeight() ? b1.getHeight() : b2.getHeight());
+        int w = b1.getWidth() + b2.getWidth(), h = Math.max(b1.getHeight(), b2.getHeight());
         BufferedImage b3 = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics2D = b3.createGraphics();
         graphics2D.drawImage(b1, 0, 0, null);

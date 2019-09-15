@@ -53,11 +53,12 @@ public final class ImmutableMap<K, V> implements Map<K, V> {
 
     @Override
     public void putAll(@Nonnull Map<? extends K, ? extends V> m) {
+        // ignored
     }
 
     @Override
     public void clear() {
-
+        // ignored
     }
 
     @Override
@@ -87,7 +88,7 @@ public final class ImmutableMap<K, V> implements Map<K, V> {
 
     @Override
     public void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
-
+        // ignored
     }
 
     @Override

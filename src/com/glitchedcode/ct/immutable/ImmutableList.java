@@ -99,6 +99,7 @@ public final class ImmutableList<E> implements List<E> {
 
     @Override
     public void replaceAll(UnaryOperator<E> operator) {
+        // ignore
     }
 
     @Override
@@ -108,6 +109,7 @@ public final class ImmutableList<E> implements List<E> {
 
     @Override
     public void clear() {
+        // ignore
     }
 
     @Override
@@ -122,7 +124,7 @@ public final class ImmutableList<E> implements List<E> {
 
     @Override
     public void add(int index, E element) {
-
+        // ignore
     }
 
     @Override

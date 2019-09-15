@@ -1,5 +1,8 @@
 package com.glitchedcode.ct.math;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(of = {"angle", "rotations"})
 public class Angle implements Cloneable {
 
     private int angle, rotations;

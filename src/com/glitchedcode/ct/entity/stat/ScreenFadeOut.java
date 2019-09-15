@@ -9,6 +9,11 @@ import com.glitchedcode.ct.window.View;
 
 import java.awt.*;
 
+/**
+ * Used as a way to introduce a reversal fade.
+ * <br />
+ * Starts out as fully transparent (a: 255) and fades to translucent (a: 0).
+ */
 public class ScreenFadeOut extends Entity {
 
     private Color color;
@@ -25,7 +30,7 @@ public class ScreenFadeOut extends Entity {
     public void tick(int count) {
         if (color.getAlpha() > 0) {
             int sum = color.getAlpha() - skip;
-            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), sum > 0 ? sum : 0);
+            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), Math.max(sum, 0));
         }
     }
 

@@ -37,7 +37,7 @@ public class Stop implements Command {
         else if (args.length == 1) {
             String s = args[0];
             try {
-                int i = Integer.valueOf(s);
+                int i = Integer.parseInt(s);
                 CoolThing.stop(i);
             } catch (NumberFormatException e) {
                 logger.command(Ansi.Color.YELLOW, "The given String \"" + s + "\" is not an integer.");

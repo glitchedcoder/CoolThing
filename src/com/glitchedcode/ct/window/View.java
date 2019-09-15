@@ -4,6 +4,7 @@ import com.glitchedcode.ct.CoolThing;
 import com.glitchedcode.ct.immutable.ImmutableList;
 import com.glitchedcode.ct.key.Key;
 import com.glitchedcode.ct.logger.Logger;
+import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -15,11 +16,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+@EqualsAndHashCode(of = {"id", "name"})
 public abstract class View implements KeyEventDispatcher {
 
     private final int id;
     private final String name;
-    protected static int WIDTH, HEIGHT;
+    protected int width, height;
     private final List<Renderable> renderables;
     private final AtomicReference<Color> background;
     protected final Logger logger = CoolThing.getLogger();
@@ -46,6 +48,11 @@ public abstract class View implements KeyEventDispatcher {
      */
     protected abstract void onUnload();
 
+    /**
+     * Called when the {@link View} is being ticked.
+     *
+     * @param count The tick count out of 30.
+     */
     protected abstract void tick(int count);
 
     /**
@@ -160,8 +167,8 @@ public abstract class View implements KeyEventDispatcher {
     }
 
     void size(int w, int h) {
-        WIDTH = w;
-        HEIGHT = h;
+        width = w;
+        height = h;
     }
 
     @Override
@@ -179,19 +186,6 @@ public abstract class View implements KeyEventDispatcher {
                     onKeyRelease(k);
                     return true;
                 }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (object != null) {
-            if (object == this)
-                return true;
-            if (object instanceof View) {
-                View view = (View) object;
-                return view.id == this.id;
             }
         }
         return false;

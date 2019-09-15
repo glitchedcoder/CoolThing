@@ -79,6 +79,7 @@ public final class CoolThing {
                 executorService.shutdownNow();
         } catch (InterruptedException e) {
             executorService.shutdownNow();
+            Thread.currentThread().interrupt();
         }
         logger.save();
         logger.close();
@@ -126,7 +127,7 @@ public final class CoolThing {
             if (a.length == 1) {
                 String s = a[0];
                 try {
-                    int w = Integer.valueOf(s);
+                    int w = Integer.parseInt(s);
                     if (w > 0)
                         return w;
                     else
@@ -149,7 +150,7 @@ public final class CoolThing {
             if (a.length == 1) {
                 String s = a[0];
                 try {
-                    int h = Integer.valueOf(s);
+                    int h = Integer.parseInt(s);
                     if (h > 0)
                         return h;
                     else

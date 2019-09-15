@@ -44,10 +44,12 @@ public final class GameApplication extends JFrame implements Runnable, FocusList
         setLocationRelativeTo(null);
     }
 
+    @Override
     public int getWidth() {
         return w;
     }
 
+    @Override
     public int getHeight() {
         return h;
     }
@@ -86,7 +88,7 @@ public final class GameApplication extends JFrame implements Runnable, FocusList
         requestFocus();
         long lastTime = System.nanoTime();
         double unprocessed = 0.0;
-        double nanoPerTick = 1000000000 / 30;
+        double nanoPerTick = ((double) 1000000000 / 30);
         int frames = 0, ticks = 0;
         long lastTimer = System.currentTimeMillis();
         Logger logger = CoolThing.getLogger();
@@ -113,6 +115,7 @@ public final class GameApplication extends JFrame implements Runnable, FocusList
                 Thread.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
             if (shouldRender) {
                 frames++;

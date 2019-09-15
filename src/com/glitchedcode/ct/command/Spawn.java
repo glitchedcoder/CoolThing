@@ -48,8 +48,8 @@ public class Spawn implements Command {
                 }
                 int x, y;
                 try {
-                    x = Integer.valueOf(args[1]);
-                    y = Integer.valueOf(args[2]);
+                    x = Integer.parseInt(args[1]);
+                    y = Integer.parseInt(args[2]);
                 } catch (NumberFormatException e) {
                     getLogger().command(Ansi.Color.RED, "Given x/y was not a valid integer.");
                     return true;

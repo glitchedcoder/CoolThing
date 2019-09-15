@@ -4,11 +4,15 @@ import com.glitchedcode.ct.CoolThing;
 import com.glitchedcode.ct.entity.Entity;
 import com.glitchedcode.ct.entity.EntityType;
 import com.glitchedcode.ct.entity.Location;
-import com.glitchedcode.ct.window.GameWindow;
 import com.glitchedcode.ct.window.View;
 
 import java.awt.*;
 
+/**
+ * Used as a way to smoothly introduce a fade-to-black.
+ * <br />
+ * Starts out as translucent (a: 0) and fades to fully transparent (a: 255).
+ */
 public class ScreenFadeIn extends Entity {
 
     private Color color;
@@ -25,7 +29,7 @@ public class ScreenFadeIn extends Entity {
     public void tick(int count) {
         if (color.getAlpha() < 255) {
             int sum = color.getAlpha() + skip;
-            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), sum >= 255 ? 255 : sum);
+            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), Math.min(255, sum));
         }
     }
 

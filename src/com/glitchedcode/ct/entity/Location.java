@@ -1,5 +1,8 @@
 package com.glitchedcode.ct.entity;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(of = {"x", "y"})
 public class Location implements Cloneable {
 
     private final int x, y;

@@ -26,10 +26,11 @@ public class ErrorLog {
                 logger.debug("Created error log folder located at " + DIR.getAbsolutePath());
         }
         File log = new File(DIR, "error_log_" + timeLog() + ".txt");
+        BetterPrintWriter writer = null;
         try {
             if (log.createNewFile())
                 logger.debug("Created error log \"" + log.getName() + "\".");
-            BetterPrintWriter writer = new BetterPrintWriter(new BufferedWriter(new FileWriter(log, false)));
+            writer = new BetterPrintWriter(new BufferedWriter(new FileWriter(log, false)));
             Stream.of("Error log of CoolThing v" + CoolThing.getVersion(),
                     "// Here we go again :(",
                     "",
@@ -50,10 +51,12 @@ public class ErrorLog {
                     "------------------------------"
             ).forEach(writer::println);
             writer.flush();
-            writer.close();
         } catch (IOException e) {
             logger.warn(Ansi.Color.RED, "Somehow managed to run into an error while creating the error log.");
             logger.warn(Ansi.Color.RED, "Report the following error to the developer:\n" + formatStackTrace(e));
+        } finally {
+            if (writer != null)
+                writer.close();
         }
     }
 

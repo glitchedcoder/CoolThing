@@ -23,6 +23,7 @@ public final class ImmutableIterator<E> implements Iterator<E> {
 
     @Override
     public void remove() {
+        // ignore
     }
 
     @Override

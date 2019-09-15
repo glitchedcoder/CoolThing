@@ -94,6 +94,7 @@ public final class ImmutableSet<E> implements Set<E> {
 
     @Override
     public void clear() {
+        // ignore
     }
 
     @Override

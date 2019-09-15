@@ -66,6 +66,7 @@ public class StaticText extends Entity {
         return builder.get();
     }
 
+    @Override
     public String toString() {
         return getClass().getName() + "{id=" + getId().toString()
                 + ", entity_type=" + getType().name() + ", location=" + getLocation().toString()

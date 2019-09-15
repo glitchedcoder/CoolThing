@@ -40,7 +40,7 @@ public class GameWindow extends Canvas {
         setMinimumSize(d);
     }
 
-    public View getView() {
+    public synchronized View getView() {
         return view.get();
     }
 
@@ -94,7 +94,7 @@ public class GameWindow extends Canvas {
         this.view.set(null);
     }
 
-    public synchronized void setView(@Nonnull View view) throws IllegalArgumentException {
+    public synchronized void setView(@Nonnull View view) {
         logger.debug("Setting new view (id: " + view.getId() + ", old view id: " + (getView() != null ? getView().getId() : "null") + ")");
         if (getView() != null) {
             if (!this.getView().equals(view)) {
@@ -106,8 +106,6 @@ public class GameWindow extends Canvas {
                 throw new IllegalArgumentException("Given View (id " + view.getId() + ") is same as current View (id " + getView().getId() + ").");
         }
         logger.info("w: " + getWidth() + ", h: " + getHeight());
-        int w = CoolThing.getApplication().getWidth();
-        int h = CoolThing.getApplication().getHeight();
         view.size(getWidth(), getHeight());
         view.onLoad();
         MANAGER.addKeyEventDispatcher(view);

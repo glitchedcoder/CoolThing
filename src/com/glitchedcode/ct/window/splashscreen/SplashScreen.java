@@ -11,12 +11,14 @@ import com.glitchedcode.ct.font.TextBuilder;
 import com.glitchedcode.ct.key.Key;
 import com.glitchedcode.ct.sound.Sound;
 import com.glitchedcode.ct.window.View;
+import lombok.EqualsAndHashCode;
 
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@EqualsAndHashCode(callSuper = true)
 public class SplashScreen extends View {
 
     private StaticImage logo;
@@ -36,12 +38,12 @@ public class SplashScreen extends View {
         logger.debug(logo.toString());
         addRenderable(logo);
         Rectangle r = logo.getBounds();
-        logo.setLocation(new Location((WIDTH / 2) - (r.width / 2), (HEIGHT / 2) - (r.height / 2)));
+        logo.setLocation(new Location((width / 2) - (r.width / 2), (height / 2) - (r.height / 2)));
         loading = new StaticText(this, TextBuilder.create("GlitchedCode", false, Color.DARK_GRAY).scale(5));
         loading.spawn();
         addRenderable(loading);
         Rectangle r2 = loading.getBounds();
-        loading.setLocation(new Location((WIDTH / 2) - (r2.width / 2), (HEIGHT / 2) - (r2.height / 2) + (r.height / 2) + 100));
+        loading.setLocation(new Location((width / 2) - (r2.width / 2), (height / 2) - (r2.height / 2) + (r.height / 2) + 100));
         logger.debug(loading.toString());
         screenFadeOut = new ScreenFadeOut(this, new Color(255, 255, 255, 255), 6);
         screenFadeOut.spawn();
@@ -70,6 +72,7 @@ public class SplashScreen extends View {
 
     @Override
     protected void tick(int count) {
+        // ignored
     }
 
     @Override

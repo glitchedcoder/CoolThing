@@ -185,7 +185,7 @@ public final class Logger {
 
     public void close() {
         if (isOpen()) {
-            if (errCount.get() > 0 || errCount.get() > 0)
+            if (errCount.get() > 0 || warnCount.get() > 0)
                 warn(Ansi.Color.YELLOW, "Finished with " + errCount.get() + " error(s) and " + warnCount.get() + " warning(s).");
             else
                 info(Ansi.Color.GREEN, "Finished with " + errCount.get() + " error(s) and " + warnCount.get() + " warning(s).");
@@ -220,10 +220,5 @@ public final class Logger {
 
     private String time() {
         return "[" + FORMAT.format(new Date()) + "] ";
-    }
-
-    private void write(String s) {
-        if (isOpen())
-            this.writer.println(s);
     }
 }

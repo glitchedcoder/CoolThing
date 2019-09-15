@@ -43,7 +43,7 @@ public final class ImmutableListIterator<E> implements ListIterator<E> {
 
     @Override
     public void remove() {
-
+        // ignore
     }
 
     @Override
@@ -53,11 +53,11 @@ public final class ImmutableListIterator<E> implements ListIterator<E> {
 
     @Override
     public void set(E e) {
-
+        // ignore
     }
 
     @Override
     public void add(E e) {
-
+        // ignore
     }
 }

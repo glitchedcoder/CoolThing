@@ -4,6 +4,7 @@ import com.glitchedcode.ct.CoolThing;
 import com.glitchedcode.ct.logger.Logger;
 import com.glitchedcode.ct.window.Renderable;
 import com.glitchedcode.ct.window.View;
+import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -11,6 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+@EqualsAndHashCode(of = { "id" })
 public abstract class Entity implements Renderable {
 
     private final UUID id;
@@ -33,16 +35,21 @@ public abstract class Entity implements Renderable {
         this.loaded = new AtomicBoolean(false);
     }
 
-    @Override
-    public abstract void tick(int count);
-
-    @Override
-    public abstract void draw(Graphics2D graphics);
-
+    /**
+     * Gets the bounds of the {@link Entity}.
+     *
+     * @return The bounds of the {@link Entity}.
+     */
     public abstract Rectangle getBounds();
 
+    /**
+     * Called when the {@link Entity} is to be loaded.
+     */
     protected abstract void onLoad();
 
+    /**
+     * Called when the {@link Entity} is to be unloaded.
+     */
     protected abstract void onUnload();
 
     @Override
@@ -114,19 +121,6 @@ public abstract class Entity implements Renderable {
             this.location.set(location);
         else
             this.location.set(new Location(0, 0));
-    }
-
-    @Override
-    public final boolean equals(Object object) {
-        if (object != null) {
-            if (object == this)
-                return true;
-            if (object instanceof Entity) {
-                Entity e = (Entity) object;
-                return e.id.equals(this.id);
-            }
-        }
-        return false;
     }
 
     @Override

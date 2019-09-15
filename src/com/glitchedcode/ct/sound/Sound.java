@@ -6,7 +6,6 @@ import org.fusesource.jansi.Ansi;
 
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 public enum Sound {
@@ -58,17 +57,5 @@ public enum Sound {
 
     public String getFileName() {
         return fileName;
-    }
-
-    private AudioInputStream setupStream(InputStream stream) throws UnsupportedAudioFileException, IOException {
-        AudioInputStream aIs = AudioSystem.getAudioInputStream(stream);
-        AudioFormat audioFormat = aIs.getFormat();
-        if (audioFormat.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
-            aIs = AudioSystem.getAudioInputStream(new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
-                            audioFormat.getSampleRate(), 16, audioFormat.getChannels() * 2,
-                            audioFormat.getFrameSize(), audioFormat.getSampleRate(), false),
-                    aIs);
-        }
-        return aIs;
     }
 }
