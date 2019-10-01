@@ -22,43 +22,48 @@ import java.util.stream.Stream;
 
 public final class CoolThing {
 
+    private static final String VERSION = "1.0.0";
+    private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
+    private static final File dataFolder = new File(System.getProperty("user.dir"));
+    
     private static Logger logger;
-    private static int WIDTH, HEIGHT;
+    private static int width, height;
     private static boolean noColor, debug, iL;
     private static GameApplication application;
     private static InputListener inputListener;
-    private static final String VERSION = "1.0.0";
-    private static ScheduledExecutorService executorService;
-    private static final File dataFolder = new File(System.getProperty("user.dir"));
 
     private CoolThing() {}
 
     public static void main(String[] args) {
         AnsiConsole.systemInstall();
         assert (dataFolder.isDirectory());
-        executorService = Executors.newScheduledThreadPool(2);
         logger = new Logger(dataFolder);
+
         if (args.length > 0) {
             noColor = hasArg("-nocolor", args);
             debug = hasArg("-debug", args);
             iL = hasArg("-input", args);
         }
+
         if (debug)
             logger.debug("Debug has been enabled for this session. Expect excessive spam.");
         if (noColor)
             logger.info("No-color has been enabled for this session.");
-        WIDTH = getWidth(args);
-        HEIGHT = getHeight(args);
-        logger.debug("Width: " + WIDTH + ", Height: " + HEIGHT);
+
+        width = getWidth(args);
+        height = getHeight(args);
+        logger.debug("Width: " + width + ", Height: " + height);
         SplashScreen splashScreen = new SplashScreen();
         GameWindow window = new GameWindow(splashScreen);
-        application = new GameApplication(window, WIDTH, HEIGHT);
+        application = new GameApplication(window, width, height);
         executorService.execute(application);
+
         if (iL) {
             Stream.of(
                     new Help(),
                     new Stop()
             ).forEach(CommandManager::register);
+
             inputListener = new InputListener();
             logger.debug("Starting input listener...");
             inputListener.start();
@@ -69,6 +74,7 @@ public final class CoolThing {
         logger.debug("Received exit code " + code + " (" + (code == -1 ? "error" : "normal") + "), closing...");
         if (iL)
             inputListener.close();
+
         application.stop();
         executorService.shutdown();
         try {
@@ -77,6 +83,7 @@ public final class CoolThing {
         } catch (InterruptedException e) {
             executorService.shutdownNow();
         }
+
         logger.save();
         logger.close();
         AnsiConsole.systemUninstall();
@@ -125,7 +132,7 @@ public final class CoolThing {
                 try {
                     int w = Integer.valueOf(s);
                     if (w > 0)
-                        WIDTH = w;
+                        width = w;
                     else
                         logger.warn(Ansi.Color.YELLOW, "The given width " + w + " needs to be positive.");
                 } catch (NumberFormatException e) {
@@ -148,7 +155,7 @@ public final class CoolThing {
                 try {
                     int h = Integer.valueOf(s);
                     if (h > 0)
-                        HEIGHT = h;
+                        height = h;
                     else
                         logger.warn(Ansi.Color.YELLOW, "The given height " + h + " needs to be positivie.");
                 } catch (NumberFormatException e) {
@@ -199,10 +206,10 @@ public final class CoolThing {
     }
 
     public static int getHeight() {
-        return HEIGHT;
+        return height;
     }
 
     public static int getWidth() {
-        return WIDTH;
+        return width;
     }
 }
