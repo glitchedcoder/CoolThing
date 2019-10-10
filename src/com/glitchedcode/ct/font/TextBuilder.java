@@ -4,7 +4,9 @@ import com.glitchedcode.ct.CoolThing;
 import com.glitchedcode.ct.logger.Logger;
 import org.fusesource.jansi.Ansi;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import static java.awt.Transparency.TRANSLUCENT;
@@ -36,6 +38,10 @@ public final class TextBuilder {
 
     public boolean hasBg() {
         return bg;
+    }
+
+    public String getText() {
+        return stringBuilder.toString();
     }
 
     public TextBuilder c(Color c) {

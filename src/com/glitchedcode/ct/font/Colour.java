@@ -1,6 +1,6 @@
 package com.glitchedcode.ct.font;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.color.ColorSpace;
 
 /**

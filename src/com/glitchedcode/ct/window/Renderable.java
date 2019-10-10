@@ -1,7 +1,7 @@
 package com.glitchedcode.ct.window;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.util.UUID;
 
 public interface Renderable {
@@ -43,7 +43,16 @@ public interface Renderable {
     boolean shouldRemove();
 
     /**
+     * Called when the {@link Renderable} is marked for removal.
+     * <br />
+     * Used for external use outside of {@link GameWindow}.
+     */
+    void dispose();
+
+    /**
      * Called when the {@link Renderable} is to be removed.
+     * <br />
+     * Do <b>NOT</b> use this, instead use {@link #dispose()}.
      */
     void remove();
 

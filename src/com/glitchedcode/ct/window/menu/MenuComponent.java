@@ -8,7 +8,9 @@ import com.glitchedcode.ct.window.View;
 import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -59,7 +61,8 @@ public class MenuComponent extends Entity {
     protected void onLoad() {
         Location l = getLocation();
         BufferedImage i = asImage();
-        this.bounds = new Rectangle(l.getX(), l.getY(), i.getWidth(), i.getHeight());
+        int x = l.getX(), y = l.getY();
+        this.bounds = new Rectangle(x, y, x + i.getWidth(), y + i.getHeight());
     }
 
     @Override
@@ -130,7 +133,8 @@ public class MenuComponent extends Entity {
                 + ", loaded=" + isLoaded() + ", dead=" + isDead() + ", visible=" + isVisible()
                 + ", view=" + (getView() != null ? getView().toString() : "null")
                 + ", text=" + getText() + "focusable=" + isFocusable() + ", focused=" + isFocused()
-                + ", builder=" + getBuilder().toString() + ", " + "}";
+                + ", builder=" + (getBuilder() != null ? getBuilder().toString() : "null")
+                + ", image=" + (asImage() != null ? asImage().toString() : "null") + "}";
     }
 
     private void updateText() {

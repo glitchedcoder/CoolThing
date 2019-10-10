@@ -5,9 +5,13 @@ import com.glitchedcode.ct.logger.Logger;
 import org.fusesource.jansi.Ansi;
 
 import javax.annotation.concurrent.ThreadSafe;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+import java.awt.Dimension;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 

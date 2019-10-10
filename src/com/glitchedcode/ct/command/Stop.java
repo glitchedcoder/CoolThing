@@ -26,7 +26,7 @@ public class Stop implements Command {
 
     @Override
     public String[] getAliases() {
-        return new String[] { "exit" };
+        return new String[] { "exit", "quit" };
     }
 
     @Override

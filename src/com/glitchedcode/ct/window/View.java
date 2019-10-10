@@ -7,9 +7,12 @@ import com.glitchedcode.ct.logger.Logger;
 import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.KeyEventDispatcher;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,7 +36,7 @@ public abstract class View implements KeyEventDispatcher {
 
     public View(String name) {
         this.name = name;
-        this.id = counter.incrementAndGet();
+        this.id = counter.getAndIncrement();
         this.renderables = new CopyOnWriteArrayList<>();
         this.background = new AtomicReference<>(Color.WHITE);
     }
@@ -112,6 +115,15 @@ public abstract class View implements KeyEventDispatcher {
     public void addRenderable(@Nonnull Renderable renderable) {
         if (!renderables.contains(renderable))
             renderables.add(renderable);
+    }
+
+    public void addRenderables(@Nonnull Renderable... renderables) {
+        if (renderables.length > 0)
+            Collections.addAll(this.renderables, renderables);
+    }
+
+    public void addRenderables(@Nonnull Collection<Renderable> renderables) {
+        this.renderables.addAll(renderables);
     }
 
     /**

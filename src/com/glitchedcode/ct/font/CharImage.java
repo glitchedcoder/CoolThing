@@ -104,6 +104,7 @@ public enum CharImage {
 
     private final char id;
     private final String fileName;
+    private static final CharImage[] values = values();
 
     CharImage(char id, String fileName) {
         this.id = id;
@@ -138,7 +139,7 @@ public enum CharImage {
     }
 
     public static CharImage fromChar(char c) {
-        for (CharImage i : values()) {
+        for (CharImage i : values) {
             if (i.id == c)
                 return i;
         }

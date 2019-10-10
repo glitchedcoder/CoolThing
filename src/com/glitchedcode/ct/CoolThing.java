@@ -12,7 +12,10 @@ import com.glitchedcode.ct.window.splashscreen.SplashScreen;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

@@ -3,6 +3,7 @@ package com.glitchedcode.ct.sound;
 public enum Volume {
 
     MUTE(-1000F),
+    QUIET(-6.0206F),
     LOW(-3.0103F),
     REGULAR(0F),
     HIGH(3.0103F),

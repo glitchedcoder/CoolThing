@@ -3,10 +3,16 @@ package com.glitchedcode.ct.window;
 import com.glitchedcode.ct.CoolThing;
 import com.glitchedcode.ct.entity.Entity;
 import com.glitchedcode.ct.logger.Logger;
+import org.fusesource.jansi.Ansi;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
-import java.awt.*;
+import java.awt.Canvas;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
+import java.awt.RenderingHints;
 import java.awt.event.FocusEvent;
 import java.awt.image.BufferStrategy;
 import java.util.concurrent.atomic.AtomicReference;
@@ -45,18 +51,12 @@ public class GameWindow extends Canvas {
     }
 
     protected synchronized void tick(int count) {
-        getView().tick(count);
-        getView().getRenderables().forEach(r -> {
+        View view = getView();
+        view.tick(count);
+        view.getRenderables().forEach(r -> {
            if (r.shouldRemove()) {
-               if (r instanceof Entity) {
-                   Entity entity = (Entity) r;
-                   if (entity.isDead())
-                       logger.debug("Removing dead entity " + entity.toString());
-                   else
-                       logger.debug("Removing (not dead) entity " + entity.toString() + " for unknown reason but 'true' Renderable#shouldRemove()");
-               }
                r.remove();
-               getView().removeRenderable(r);
+               view.removeRenderable(r);
            } else
                r.tick(count);
         });
@@ -68,11 +68,12 @@ public class GameWindow extends Canvas {
             createBufferStrategy(3);
             return;
         }
+        View view = getView();
         Graphics2D graphics = (Graphics2D) strategy.getDrawGraphics();
         graphics.setRenderingHints(hints);
-        graphics.setColor(getView().getBackground());
+        graphics.setColor(view.getBackground());
         graphics.fillRect(0, 0, getWidth(), getHeight());
-        getView().getRenderables().forEach(r -> {
+        view.getRenderables().forEach(r -> {
             if (r.shouldDraw())
                 r.draw(graphics);
         });
@@ -95,18 +96,19 @@ public class GameWindow extends Canvas {
     }
 
     public synchronized void setView(@Nonnull View view) {
-        logger.debug("Setting new view (id: " + view.getId() + ", old view id: " + (getView() != null ? getView().getId() : "null") + ")");
-        if (getView() != null) {
-            if (!this.getView().equals(view)) {
-                if (getView() != null) {
-                    getView().onUnload();
-                    MANAGER.removeKeyEventDispatcher(getView());
-                }
-            } else
-                throw new IllegalArgumentException("Given View (id " + view.getId() + ") is same as current View (id " + getView().getId() + ").");
+        View v = getView();
+        if (v != null) {
+            if (v.getId() == view.getId()) {
+                logger.warn(Ansi.Color.RED, "Given new view is the same as the old view!");
+                logger.warn(Ansi.Color.RED, "Old view: " + v.toString());
+                logger.warn(Ansi.Color.RED, "New view: " + view.toString());
+                return;
+            }
+            logger.debug("Unloading old view '" + v.getName() + "' (id " + v.getId() + ").");
+            MANAGER.removeKeyEventDispatcher(v);
+            v.onUnload();
         }
-        logger.info("w: " + getWidth() + ", h: " + getHeight());
-        view.size(getWidth(), getHeight());
+        logger.debug("Loading new view '" + view.getName() + "' (id: " + view.getId() + ").");
         view.onLoad();
         MANAGER.addKeyEventDispatcher(view);
         this.view.set(view);

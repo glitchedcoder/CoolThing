@@ -13,7 +13,7 @@ import org.fusesource.jansi.Ansi;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.awt.*;
+import java.awt.Color;
 import java.util.function.Function;
 
 public enum EntityType {
@@ -25,7 +25,7 @@ public enum EntityType {
         return new StaticText(view, TextBuilder.create("text", false));
     }),
     SCREEN_FADE_IN("Screen Fade In", "fade_in", true, view -> {
-        return new ScreenFadeIn(view, Color.black, 1);
+        return new ScreenFadeIn(view, Color.BLACK, 1);
     }),
     SCREEN_FADE_OUT("Screen Fade Out", "fade_out", true, view -> {
         return new ScreenFadeOut(view, Color.BLACK, 1);
@@ -36,6 +36,7 @@ public enum EntityType {
 
     private final String name, id;
     private final boolean isStatic;
+    private static final EntityType[] values = values();
     private final Function<View, ? extends Entity> function;
 
     EntityType(String name, String id, boolean isStatic, Function<View, ? extends Entity> function) {
@@ -57,6 +58,7 @@ public enum EntityType {
         return isStatic;
     }
 
+    @Nullable
     public Entity spawn(Location location) {
         if (CoolThing.getApplication() != null) {
             View view = CoolThing.getApplication().getWindow().getView();
@@ -89,7 +91,7 @@ public enum EntityType {
 
     @Nullable
     public static EntityType fromName(@Nonnull String s) {
-        for (EntityType t : values()) {
+        for (EntityType t : values) {
             if (t.getName().equalsIgnoreCase(s))
                 return t;
         }
@@ -98,7 +100,7 @@ public enum EntityType {
 
     @Nonnull
     public static EntityType fromName(@Nonnull String s, EntityType defaultValue) {
-        for (EntityType t : values()) {
+        for (EntityType t : values) {
             if (t.getName().equalsIgnoreCase(s))
                 return t;
         }
@@ -107,7 +109,7 @@ public enum EntityType {
 
     @Nullable
     public static EntityType fromId(@Nonnull String id) {
-        for (EntityType t : values()) {
+        for (EntityType t : values) {
             if (t.id.equalsIgnoreCase(id))
                 return t;
         }
@@ -116,7 +118,7 @@ public enum EntityType {
 
     @Nonnull
     public static EntityType fromId(@Nonnull String id, EntityType defaultValue) {
-        for (EntityType t : values()) {
+        for (EntityType t : values) {
             if (t.id.equalsIgnoreCase(id))
                 return t;
         }

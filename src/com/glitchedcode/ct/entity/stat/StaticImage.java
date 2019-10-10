@@ -5,14 +5,17 @@ import com.glitchedcode.ct.entity.EntityType;
 import com.glitchedcode.ct.entity.ImageType;
 import com.glitchedcode.ct.entity.Location;
 import com.glitchedcode.ct.window.View;
+import lombok.EqualsAndHashCode;
 import org.fusesource.jansi.Ansi;
 
 import javax.annotation.concurrent.ThreadSafe;
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicReference;
 
 @ThreadSafe
+@EqualsAndHashCode(callSuper = true)
 public class StaticImage extends Entity {
 
     private Rectangle rectangle;
@@ -99,6 +102,6 @@ public class StaticImage extends Entity {
                 + ", entity_type=" + getType().name() + ", location=" + getLocation().toString()
                 + ", loaded=" + isLoaded() + ", dead=" + isDead() + ", visible=" + isVisible()
                 + ", view=" + (getView() != null ? getView().toString() : "null")
-                + ", image={" + getImage().toString() + "}, image_type=" + getImageType().name() + "}";
+                + ", image={" + (getImage() != null ? getImage().toString() : "null") + "}, image_type=" + getImageType().name() + "}";
     }
 }

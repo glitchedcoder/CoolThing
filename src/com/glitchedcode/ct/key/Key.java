@@ -102,6 +102,7 @@ public enum Key {
     PLUS(KeyEvent.VK_PLUS);
 
     private final int id;
+    private static final Key[] values = values();
 
     Key(int id) {
         this.id = id;
@@ -113,7 +114,7 @@ public enum Key {
 
     @Nullable
     public static Key toKey(int id) {
-        for (Key k : values()) {
+        for (Key k : values) {
             if (k.id == id)
                 return k;
         }

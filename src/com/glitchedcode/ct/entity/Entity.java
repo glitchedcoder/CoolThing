@@ -5,9 +5,10 @@ import com.glitchedcode.ct.logger.Logger;
 import com.glitchedcode.ct.window.Renderable;
 import com.glitchedcode.ct.window.View;
 import lombok.EqualsAndHashCode;
+import org.fusesource.jansi.Ansi;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -19,7 +20,7 @@ public abstract class Entity implements Renderable {
     private final View view;
     private final EntityType type;
     private final AtomicReference<Location> location;
-    private final AtomicBoolean dead, visible, loaded;
+    private final AtomicBoolean dead, visible, loaded, remove;
     protected static final Logger logger = CoolThing.getLogger();
 
     public Entity(@Nonnull View view, @Nonnull EntityType type, Location location) {
@@ -33,6 +34,7 @@ public abstract class Entity implements Renderable {
         this.dead = new AtomicBoolean(false);
         this.visible = new AtomicBoolean(false);
         this.loaded = new AtomicBoolean(false);
+        this.remove = new AtomicBoolean(false);
     }
 
     /**
@@ -69,13 +71,18 @@ public abstract class Entity implements Renderable {
     }
 
     @Override
+    public final void dispose() {
+
+    }
+
+    @Override
     public final void remove() {
         if (!isDead() && isLoaded()) {
             this.onUnload();
-            this.loaded.set(false);
-            this.dead.set(true);
+            dead.set(true);
+            loaded.set(false);
         } else
-            logger.warn("Tried to remove dead & unloaded entity: " + toString());
+            logger.warn(Ansi.Color.RED, "Tried to remove dead & unloaded entity: " + toString());
     }
 
     @Override
@@ -85,7 +92,7 @@ public abstract class Entity implements Renderable {
 
     @Override
     public boolean shouldRemove() {
-        return dead.get();
+        return remove.get();
     }
 
     public final boolean isDead() {

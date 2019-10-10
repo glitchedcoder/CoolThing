@@ -10,13 +10,17 @@ import com.glitchedcode.ct.entity.stat.StaticText;
 import com.glitchedcode.ct.font.TextBuilder;
 import com.glitchedcode.ct.key.Key;
 import com.glitchedcode.ct.sound.Sound;
+import com.glitchedcode.ct.sound.Volume;
 import com.glitchedcode.ct.window.View;
+import com.glitchedcode.ct.window.menu.MainMenu;
 import lombok.EqualsAndHashCode;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 @EqualsAndHashCode(callSuper = true)
 public class SplashScreen extends View {
@@ -50,24 +54,25 @@ public class SplashScreen extends View {
         addRenderable(screenFadeOut);
         screenFadeIn = new ScreenFadeIn(this, new Color(0, 0, 0, 0), 3);
         ScheduledExecutorService service = CoolThing.getExecutorService();
-        service.schedule((Runnable) Sound.UPGRADE_PURCHASE::play, 2, TimeUnit.SECONDS);
+        service.schedule(() -> Sound.UPGRADE_PURCHASE.play(Volume.LOW), 2, TimeUnit.SECONDS);
         service.schedule(() -> {
             screenFadeIn.spawn();
             addRenderable(screenFadeIn);
         }, 4, TimeUnit.SECONDS);
-        service.schedule((Runnable) Sound.THEME_SONG::play, 8, TimeUnit.SECONDS);
+        service.schedule(() -> setView(new MainMenu()), 8, TimeUnit.SECONDS);
     }
 
     @Override
     protected void onUnload() {
-        logo.remove();
-        loading.remove();
-        screenFadeOut.remove();
-        screenFadeIn.remove();
-        logo = null;
-        loading = null;
-        screenFadeOut = null;
-        screenFadeIn = null;
+        Stream.of(
+                logo,
+                loading,
+                screenFadeOut,
+                screenFadeIn
+        ).forEach(e -> {
+            if (e.isLoaded())
+                e.dispose();
+        });
     }
 
     @Override

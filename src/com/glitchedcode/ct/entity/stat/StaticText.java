@@ -5,11 +5,14 @@ import com.glitchedcode.ct.entity.EntityType;
 import com.glitchedcode.ct.entity.Location;
 import com.glitchedcode.ct.font.TextBuilder;
 import com.glitchedcode.ct.window.View;
+import lombok.EqualsAndHashCode;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicReference;
 
+@EqualsAndHashCode(callSuper = true)
 public class StaticText extends Entity {
 
     private Rectangle bounds;
@@ -69,9 +72,9 @@ public class StaticText extends Entity {
     @Override
     public String toString() {
         return getClass().getName() + "{id=" + getId().toString()
-                + ", entity_type=" + getType().name() + ", location=" + getLocation().toString()
+                + ", entity_type=" + getType().name() + ", location=" + (getLocation() != null ? getLocation().toString() : "null")
                 + ", loaded=" + isLoaded() + ", dead=" + isDead() + ", visible=" + isVisible()
                 + ", view=" + (getView() != null ? getView().toString() : "null")
-                + ", text_builder=" + getTextBuilder().toString() + "}";
+                + ", text_builder=" + (getTextBuilder() != null ? getTextBuilder().toString() : "null") + "}";
     }
 }

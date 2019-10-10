@@ -6,6 +6,12 @@ import org.fusesource.jansi.Ansi;
 
 import javax.annotation.Nonnull;
 
+/**
+ * A really niche {@link Command} with not a whole lot of
+ * use other than some basic stuff like spawning static entities.
+ * <br />
+ * Even then, the entities being spawned are uneditable beyond their default vals.
+ */
 public class Spawn implements Command {
 
     @Nonnull
@@ -54,7 +60,9 @@ public class Spawn implements Command {
                     getLogger().command(Ansi.Color.RED, "Given x/y was not a valid integer.");
                     return true;
                 }
-                t.spawn(new Location(x, y));
+                if (t.spawn(new Location(x, y)) == null) {
+                    getLogger().warn(Ansi.Color.RED, "Failed to spawn " + t.getName());
+                }
                 getLogger().command("Spawned a " + t.getName() + " at (" + x + ", " + y + ").");
                 return true;
             }

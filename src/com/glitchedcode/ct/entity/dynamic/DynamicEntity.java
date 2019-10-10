@@ -5,12 +5,14 @@ import com.glitchedcode.ct.entity.EntityType;
 import com.glitchedcode.ct.entity.Location;
 import com.glitchedcode.ct.math.Vector;
 import com.glitchedcode.ct.window.View;
+import lombok.EqualsAndHashCode;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 @ThreadSafe
+@EqualsAndHashCode(callSuper = true)
 public abstract class DynamicEntity extends Entity {
 
     private final AtomicBoolean canCollide;

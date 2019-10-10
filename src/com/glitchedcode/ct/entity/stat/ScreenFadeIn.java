@@ -5,14 +5,18 @@ import com.glitchedcode.ct.entity.Entity;
 import com.glitchedcode.ct.entity.EntityType;
 import com.glitchedcode.ct.entity.Location;
 import com.glitchedcode.ct.window.View;
+import lombok.EqualsAndHashCode;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 /**
  * Used as a way to smoothly introduce a fade-to-black.
  * <br />
  * Starts out as translucent (a: 0) and fades to fully transparent (a: 255).
  */
+@EqualsAndHashCode(callSuper = true)
 public class ScreenFadeIn extends Entity {
 
     private Color color;

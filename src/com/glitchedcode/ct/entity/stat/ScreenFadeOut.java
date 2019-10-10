@@ -6,14 +6,18 @@ import com.glitchedcode.ct.entity.EntityType;
 import com.glitchedcode.ct.entity.Location;
 import com.glitchedcode.ct.window.GameWindow;
 import com.glitchedcode.ct.window.View;
+import lombok.EqualsAndHashCode;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 /**
  * Used as a way to introduce a reversal fade.
  * <br />
  * Starts out as fully transparent (a: 255) and fades to translucent (a: 0).
  */
+@EqualsAndHashCode(callSuper = true)
 public class ScreenFadeOut extends Entity {
 
     private Color color;
