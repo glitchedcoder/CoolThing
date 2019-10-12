@@ -39,23 +39,20 @@ public class SplashScreen extends View {
         requestFocus();
         logo = new StaticImage(this, ImageType.LOGO, new Location(0, 0));
         logo.spawn();
-        logger.debug(logo.toString());
-        addRenderable(logo);
         Rectangle r = logo.getBounds();
         logo.setLocation(new Location((width / 2) - (r.width / 2), (height / 2) - (r.height / 2)));
         loading = new StaticText(this, TextBuilder.create("GlitchedCode", false, Color.DARK_GRAY).scale(5));
         loading.spawn();
-        addRenderable(loading);
         Rectangle r2 = loading.getBounds();
         loading.setLocation(new Location((width / 2) - (r2.width / 2), (height / 2) - (r2.height / 2) + (r.height / 2) + 100));
-        logger.debug(loading.toString());
         screenFadeOut = new ScreenFadeOut(this, new Color(255, 255, 255, 255), 6);
         screenFadeOut.spawn();
-        addRenderable(screenFadeOut);
+        addRenderables(logo, loading, screenFadeOut);
         screenFadeIn = new ScreenFadeIn(this, new Color(0, 0, 0, 0), 3);
         ScheduledExecutorService service = CoolThing.getExecutorService();
         service.schedule(() -> Sound.UPGRADE_PURCHASE.play(Volume.LOW), 2, TimeUnit.SECONDS);
         service.schedule(() -> {
+            screenFadeOut.dispose();
             screenFadeIn.spawn();
             addRenderable(screenFadeIn);
         }, 4, TimeUnit.SECONDS);
@@ -70,8 +67,10 @@ public class SplashScreen extends View {
                 screenFadeOut,
                 screenFadeIn
         ).forEach(e -> {
-            if (e.isLoaded())
-                e.dispose();
+            if (e.isLoaded()) {
+                removeRenderable(e);
+                e.remove();
+            }
         });
     }
 

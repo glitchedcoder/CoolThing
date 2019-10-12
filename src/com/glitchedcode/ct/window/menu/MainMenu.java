@@ -1,24 +1,34 @@
 package com.glitchedcode.ct.window.menu;
 
 import com.glitchedcode.ct.CoolThing;
+import com.glitchedcode.ct.entity.Location;
+import com.glitchedcode.ct.entity.stat.StaticText;
 import com.glitchedcode.ct.font.TextBuilder;
 import com.glitchedcode.ct.key.Key;
 import com.glitchedcode.ct.sound.Sound;
+import com.glitchedcode.ct.window.GameApplication;
 import lombok.EqualsAndHashCode;
 
 import javax.annotation.Nullable;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
+import java.awt.image.BufferedImage;
+
+import static java.awt.Color.WHITE;
 
 @EqualsAndHashCode(callSuper = true)
 public class MainMenu extends Menu {
 
+    private StaticText gameInfo;
     private MenuComponent playComponent;
     private MenuComponent exitComponent;
     private MenuComponent optionsComponent;
 
     public MainMenu() {
-        super(TextBuilder.create("B", false, Color.RED).c(Color.WHITE).a("GGG").scale(10));
+        super(TextBuilder.create("B", false, Color.RED).c(Color.LIGHT_GRAY).a("ONG").scale(10));
+        playComponent = new MenuComponent(this, "PLAY", 7D);
+        optionsComponent = new MenuComponent(this, "OPTIONS", 7D);
+        exitComponent = new MenuComponent(this, "EXIT", 7D);
     }
 
     @Nullable
@@ -57,10 +67,11 @@ public class MainMenu extends Menu {
     @Override
     public void onLoad() {
         super.onLoad();
-        playComponent = new MenuComponent(this, "PLAY", 7D);
-        optionsComponent = new MenuComponent(this, "OPTIONS", 7D);
-        exitComponent = new MenuComponent(this, "EXIT", 7D);
-        addRenderable(playComponent);
+        TextBuilder builder = TextBuilder.create("FPS: -- TPS: --", false, WHITE).scale(2D);
+        gameInfo = new StaticText(this, builder);
+        gameInfo.spawn();
+        gameInfo.setLocation(null);
+        addRenderable(gameInfo);
     }
 
     @Override
@@ -70,7 +81,13 @@ public class MainMenu extends Menu {
 
     @Override
     protected void tick(int count) {
-        // ignore
+        GameApplication app = CoolThing.getApplication();
+        if (count % 30 == 0) {
+            TextBuilder builder = TextBuilder
+                    .create("FPS: " + app.getFramesPerSecond() + " TPS: " + app.getTicksPerSecond(), false, WHITE)
+                    .scale(2D);
+            gameInfo.setText(builder);
+        }
     }
 
     @Override

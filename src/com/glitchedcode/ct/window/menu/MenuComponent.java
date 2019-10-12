@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MenuComponent extends Entity {
 
     private Rectangle bounds;
+    private final double scale;
     private Color focus, unfocus, unfocusable;
     private final AtomicReference<String> text;
     private final AtomicBoolean focused, focusable;
@@ -31,6 +32,7 @@ public class MenuComponent extends Entity {
 
     public MenuComponent(View view, String text, double scale) {
         super(view, EntityType.MENU_COMPONENT, new Location(0, 0));
+        this.scale = scale;
         this.focus = Color.WHITE;
         this.unfocus = Color.LIGHT_GRAY;
         this.unfocusable = Color.DARK_GRAY;
@@ -104,6 +106,7 @@ public class MenuComponent extends Entity {
         if (!isFocusable() && focused)
             throw new IllegalStateException("Tried to set Menu Component (" + toString() + ") to focused while unfocusable.");
         this.focused.set(focused);
+        updateText();
     }
 
     public void setFocusable(boolean focusable) {
@@ -139,11 +142,11 @@ public class MenuComponent extends Entity {
 
     private void updateText() {
         if (isFocusable()) {
-            TextBuilder b = TextBuilder.create(text.get(), false, isFocused() ? focus : unfocus);
+            TextBuilder b = TextBuilder.create(text.get(), false, isFocused() ? focus : unfocus).scale(scale);
             image.set(b.build());
             builder.set(b);
         } else {
-            TextBuilder b = TextBuilder.create(text.get(), false, unfocusable);
+            TextBuilder b = TextBuilder.create(text.get(), false, unfocusable).scale(scale);
             image.set(b.build());
             builder.set(b);
         }

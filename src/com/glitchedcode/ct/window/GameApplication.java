@@ -34,6 +34,9 @@ public final class GameApplication extends JFrame implements Runnable, FocusList
         setTitle("Cool Thing v" + CoolThing.getVersion());
         Dimension d = new Dimension(w, h);
         setSize(d);
+        setMinimumSize(d);
+        setMaximumSize(d);
+        setPreferredSize(d);
         window.adjustSize(this, w, h);
         add(window);
         setResizable(false);

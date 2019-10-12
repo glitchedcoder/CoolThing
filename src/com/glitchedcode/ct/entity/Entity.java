@@ -63,7 +63,7 @@ public abstract class Entity implements Renderable {
     @Override
     public final void spawn() {
         if (!isDead()) {
-            this.onLoad();
+            onLoad();
             this.loaded.set(true);
             this.visible.set(true);
         } else
@@ -72,13 +72,13 @@ public abstract class Entity implements Renderable {
 
     @Override
     public final void dispose() {
-
+        remove.set(true);
     }
 
     @Override
     public final void remove() {
         if (!isDead() && isLoaded()) {
-            this.onUnload();
+            onUnload();
             dead.set(true);
             loaded.set(false);
         } else
@@ -121,6 +121,10 @@ public abstract class Entity implements Renderable {
 
     public final void setVisible(boolean visible) {
         this.visible.set(visible);
+    }
+
+    public final void setLocation(int x, int y) {
+        setLocation(new Location(x, y));
     }
 
     public final void setLocation(Location location) {

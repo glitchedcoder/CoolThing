@@ -39,20 +39,22 @@ public interface Renderable {
      * Gets whether the {@link Renderable} should be {@link #remove() removed}.
      *
      * @return True if the {@link Renderable} should be removed.
+     * @see #remove()
+     * @see #dispose()
      */
     boolean shouldRemove();
 
     /**
-     * Called when the {@link Renderable} is marked for removal.
+     * Called when the {@link Renderable} is to be removed passively.
      * <br />
-     * Used for external use outside of {@link GameWindow}.
+     * The {@link Renderable} will be removed on the next tick and when {@link #shouldRemove()} returns {@code true}.
      */
     void dispose();
 
     /**
-     * Called when the {@link Renderable} is to be removed.
+     * Called when the {@link Renderable} is to be removed forcibly.
      * <br />
-     * Do <b>NOT</b> use this, instead use {@link #dispose()}.
+     * Usually called during {@link View#onUnload()}.
      */
     void remove();
 

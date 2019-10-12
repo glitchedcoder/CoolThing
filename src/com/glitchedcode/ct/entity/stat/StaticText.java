@@ -7,6 +7,7 @@ import com.glitchedcode.ct.font.TextBuilder;
 import com.glitchedcode.ct.window.View;
 import lombok.EqualsAndHashCode;
 
+import javax.annotation.Nonnull;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -36,6 +37,13 @@ public class StaticText extends Entity {
     @Override
     public void draw(Graphics2D graphics) {
         graphics.drawImage(image.get(), getLocation().getX(), getLocation().getY(), null);
+    }
+
+    public void setText(@Nonnull TextBuilder builder) {
+        this.builder.set(builder);
+        BufferedImage i = builder.build();
+        this.image.set(i);
+        this.bounds = new Rectangle(i.getWidth(), i.getHeight());
     }
 
     @Override

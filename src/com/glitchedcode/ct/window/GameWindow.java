@@ -1,7 +1,6 @@
 package com.glitchedcode.ct.window;
 
 import com.glitchedcode.ct.CoolThing;
-import com.glitchedcode.ct.entity.Entity;
 import com.glitchedcode.ct.logger.Logger;
 import org.fusesource.jansi.Ansi;
 
@@ -20,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @ThreadSafe
 public class GameWindow extends Canvas {
 
+    private int correctedHeight;
     private final AtomicReference<View> view;
     private static final RenderingHints hints;
     private static final Logger logger = CoolThing.getLogger();
@@ -38,7 +38,8 @@ public class GameWindow extends Canvas {
 
     void adjustSize(GameApplication window, int w, int h) {
         Insets insets = window.getInsets();
-        int b = h - insets.top;
+        int b = h - insets.top - insets.bottom;
+        correctedHeight = b;
         Dimension d = new Dimension(w, b);
         setSize(d);
         setPreferredSize(d);
@@ -55,6 +56,7 @@ public class GameWindow extends Canvas {
         view.tick(count);
         view.getRenderables().forEach(r -> {
            if (r.shouldRemove()) {
+               logger.debug("Removing renderable marked for disposal: " + r.toString());
                r.remove();
                view.removeRenderable(r);
            } else
@@ -107,10 +109,11 @@ public class GameWindow extends Canvas {
             logger.debug("Unloading old view '" + v.getName() + "' (id " + v.getId() + ").");
             MANAGER.removeKeyEventDispatcher(v);
             v.onUnload();
-        }
+        } else
+            view.size(getWidth(), correctedHeight);
         logger.debug("Loading new view '" + view.getName() + "' (id: " + view.getId() + ").");
-        view.onLoad();
-        MANAGER.addKeyEventDispatcher(view);
         this.view.set(view);
+        MANAGER.addKeyEventDispatcher(view);
+        view.onLoad();
     }
 }

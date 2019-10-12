@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 
 @EqualsAndHashCode(callSuper = true)
 public abstract class Menu extends View {
@@ -23,8 +24,10 @@ public abstract class Menu extends View {
 
     public Menu(@Nonnull TextBuilder title, int yOffset) {
         super(title.getText());
-        this.title = new StaticImage(this, title.build());
-        this.title.setLocation(new Location());
+        BufferedImage i = title.build();
+        Location midTop = new Location((width / 2) - (i.getWidth() / 2), ((height / 2) - (i.getHeight() / 2)) / 2).add(0, yOffset);
+        this.title = new StaticImage(this, i);
+        this.title.setLocation(midTop);
     }
 
     @Nullable
@@ -57,7 +60,7 @@ public abstract class Menu extends View {
     @Nullable
     protected final MenuComponent getNextFocusableComponent() {
         int j = getIndex();
-        for (int i = j; i < getComponents().length; i++) {
+        for (int i = j + 1; i < getComponents().length; i++) {
             MenuComponent component = getComponents()[i];
             if (component.isFocusable())
                 return component;
@@ -103,9 +106,13 @@ public abstract class Menu extends View {
         addRenderable(title);
         if (getComponents().length == 0)
             throw new IllegalStateException("Menu#getComponents() is empty.");
-        for (MenuComponent component : getComponents()) {
-            component.spawn();
-            addRenderable(component);
+        int j = 1;
+        for (MenuComponent c : getComponents()) {
+            c.spawn();
+            addRenderable(c);
+            BufferedImage i = c.asImage();
+            c.setLocation((width / 2) - (i.getWidth() / 2), title.getLocation().getY() + (j * 200));
+            j++;
         }
         for (MenuComponent component : getComponents()) {
             if (component.isFocusable()) {
@@ -128,6 +135,8 @@ public abstract class Menu extends View {
 
     @Override
     public void onKeyPress(Key key) {
+        logger.debug("Key: " + key.name());
+        logger.debug("Current component: " + getFocusedComponent().getText());
         switch (key) {
             case W:
             case ARROW_UP:

@@ -24,14 +24,14 @@ public abstract class View implements KeyEventDispatcher {
 
     private final int id;
     private final String name;
-    protected int width, height;
+    protected static int width, height;
     private final List<Renderable> renderables;
     private final AtomicReference<Color> background;
     protected final Logger logger = CoolThing.getLogger();
     private static final AtomicInteger counter = new AtomicInteger(0);
 
     public View() {
-        this("");
+        this("View " + counter.get());
     }
 
     public View(String name) {
@@ -132,6 +132,7 @@ public abstract class View implements KeyEventDispatcher {
      * @param renderable The renderable object.
      */
     public void removeRenderable(@Nonnull Renderable renderable) {
+        logger.debug("Removing renderable " + renderable.toString());
         renderables.remove(renderable);
     }
 
